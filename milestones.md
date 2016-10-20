@@ -5,17 +5,17 @@
 * ~~**October 13th**: Brainstorm due~~
 * **October 20th**: 
     - Components ordered
-    - Pseudocode
-    - Identify useful functions and existing open-source code
+    - Plan of action
+    - Identify existing open-source resources
 * **October 27th**: 
-    - Microscope and platform assembled, manual stage adjustment
-    - Captures images at fixed plane
+    - Connect microscope, stackshot, and pi
+    - Capture images at a set of planes
 * **November 3rd**: 
     - Abstract due
-    - Captures images at a set of planes
-* **November 10th**: Prototype due
     - Composites in-focus portions of images
-* **November 17th**: Fit and finish due
+* **November 10th**: Prototype due
     - Automated z-stepping and image capture
+* **November 17th**: Fit and finish due
+    - Touchscreen user interface
 * **November 29th**: Submit code
 * **December 1st**: Paper due / presentations
