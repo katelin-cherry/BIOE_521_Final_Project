@@ -1,8 +1,8 @@
 ###Stackshot
 - Set Stackshot step increments
-- Calculate depth of field
+     - Calculate depth of field
 - Set Stackshot timing between steps
-..- One of the shutter outputs can be changed into an input?
+     - One of the shutter outputs can be changed into an input?
 - Design/3D print/attach microscope stage (sample moves, camera stays still)
 
 ###Microscope
@@ -18,8 +18,8 @@
 
 ###User interface
 - Display composite images
-..- Slideshow w/ music
+     - Slideshow w/ music
 - Allow user to control parameters
-..- Number of images
-..- Range of distances
-..- Incremented distance between each image
+     - Number of images
+     - Range of distances
+     - Incremented distance between each image
