@@ -2,9 +2,9 @@
 - Need to figure out how to change stack filepath/folder names/saved image names (bolded below) for subsequent stacks
 - How to run ImageJ from the pi command terminal?
 
-run("Image Sequence...", "open=C:\\Users\\Melody\\Desktop\\Stacks\\Stack001\\Image001.jpg sort use"); \
-run("Stack Focuser ", "enter=20"); \
-selectWindow("Focused_Stack001"); \
+run("Image Sequence...", "open=C:\\Users\\Melody\\Desktop\\Stacks\\Stack001\\Image001.jpg sort use");/
+run("Stack Focuser ", "enter=20");/
+selectWindow("Focused_Stack001");/
 saveAs("Tiff", "C:\\Users\\Melody\\Desktop\\Stacks\\Focused\\Beautiful001.tif");
 
 ###Manual steps
