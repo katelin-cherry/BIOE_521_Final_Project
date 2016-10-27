@@ -1,7 +1,0 @@
-#Macro code to do focus stacking with Image J
-
-
-run("Image Sequence...", "open=C:\\Users\\Melody\\Desktop\\Stacks\\Bottlebrush\\D2X_0343.jpg sort use");
-run("Stack Focuser ", "enter=20");
-
-saveAs("Tiff", "C:\\Users\\Melody\\Desktop\\Stacks\\Bottlebrush\\Focused_Bottlebrush.tif");
