@@ -21,8 +21,8 @@ if not cap:
 
 cap.set(3,1280)
 cap.set(4,720)
-
-
+count=0
+folder='/home/pi/BIOE_521_Final_Project/focusstack/input/'
 while (True):
     #Capture frame-by-frame
     ret, frame=cap.read()
@@ -35,13 +35,15 @@ while (True):
     c = cv2.waitKey(1)
     if 's'==chr(c&255):
         endTime=time.time()+10
-        while time.time()<endTime:
-                cap=cv2.VideoCapture(0)
-                img=cap.read()
-                cv2.imwrite('/home/pi/BIOE_521_Final_Project/focusstack/input/img{}.png'.format(int(time.time())),frame)
-                del(cap)
-                print "img{}".format(int(time.time()))
-                time.sleep(1)
+        while (1):
+                if count<10:
+                        ret,frame=cap.read()
+                        frame_num="%08d" %(count,)
+                        cv2.imwrite(folder+frame_num+'.png',frame)
+                        c=cv2.waitKey(1)
+                        count=count+1
+                        print 'frame_num'
+                        time.sleep(2.5)
     if cv2.waitKey(1)&0xFF==ord('q'):
         break
     #Wait for Excape Key
