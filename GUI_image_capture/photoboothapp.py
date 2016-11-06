@@ -52,7 +52,7 @@ class PhotoBoothApp:
 				# grab the frame from the video stream and resize it to
 				# have a maximum width of 300 pixels
 				self.frame = self.vs.read()
-				self.frame = imutils.resize(self.frame, width=300)
+				self.frame = imutils.resize(self.frame, width=600)
 		
 				# OpenCV represents images in BGR order; however PIL
 				# represents images in RGB order, so we need to swap
@@ -78,14 +78,14 @@ class PhotoBoothApp:
 	def takeSnapshot(self):
 		# grab the current timestamp and use it to construct the
 		# output path
-		ts = datetime.datetime.now()
-		filename = '/home/pi/BIOE_521_Final_Project/{}.jpg'.format(ts.strftime("%Y-%m-%d_%H-%M-%S"))
-		p = os.path.sep.join((self.outputPath, filename))
+                ts = datetime.datetime.now()
+                filename = "{}.jpg".format(ts.strftime("%Y-%m-%d_%H-%M-%S"))
+                p = os.path.sep.join((self.outputPath, filename))
 
-		# save the file
-		#cv2.imwrite(p, self.frame.copy())
-		cv2.imwrite(filename,image)
-		print("[INFO] saved {}".format(filename))
+                # save the file
+                cv2.imwrite(p, self.frame.copy())
+                #cv2.imwrite(filename,image)
+                print("[INFO] saved {}".format(filename))
 
 	def onClose(self):
 		# set the stop event, cleanup the camera, and allow the rest of

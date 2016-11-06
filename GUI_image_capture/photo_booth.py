@@ -7,6 +7,14 @@ from photoboothapp import PhotoBoothApp
 from imutils.video import VideoStream
 import argparse
 import time
+import glob,os
+
+#Remove old image files in input folder
+image_files="/home/pi/BIOE_521_Final_Project/focusstack/input/*"
+r=glob.glob(image_files)
+for i in r:
+        os.remove(i)
+
 
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
