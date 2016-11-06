@@ -20,10 +20,10 @@ def stackHDRs(image_files):
     focusimages = []
     for img in image_files:
         print "Reading in file {}".format(img)
-        focusimages.append(cv2.imread("input/{}".format(img)))
+        focusimages.append(cv2.imread(("input/{}").format(img)))
 
     merged = FocusStack.focus_stack(focusimages)
-    cv2.imwrite("merged.png", merged)
+    cv2.imwrite(("merged.png"), merged)
 
 
 if __name__ == "__main__":

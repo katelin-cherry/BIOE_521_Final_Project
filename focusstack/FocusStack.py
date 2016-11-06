@@ -129,7 +129,7 @@ def focus_stack(unimages):
     print "Computing the laplacian of the blurred images"
     laps = []
     for i in range(len(images)):
-        print "Lap {}".format(i)
+        print ("Lap {}").format(i)
         laps.append(doLap(cv2.cvtColor(images[i],cv2.COLOR_BGR2GRAY)))
 
     laps = np.asarray(laps)
