@@ -9,7 +9,7 @@ import imutils
 import cv2
 import os
 
-class PhotoBoothApp:
+class LiveStreamApp:
 	def __init__(self, vs, outputPath):
 		# store the video stream object and output path, then initialize
 		# the most recently read frame, thread for reading frames, and
@@ -29,10 +29,10 @@ class PhotoBoothApp:
 
 		btn = tki.Button(self.root, text="Start Image Capture",
 			command=self.takeSnapshot)
-		btn.pack(side="bottom", fill="both", expand="yes", padx=10,
-			pady=10)
+		btn.pack(side="bottom", fill="both", expand="no", padx=5,
+			pady=5)
 		btn2 = tki.Button(self.root, text="Focusstack images", command=self.focusstack)
-		btn2.pack(side="bottom", fill="both", expand="yes", padx = 10, pady=10)
+		btn2.pack(side="bottom", fill="both", expand="no", padx = 5, pady=5)
                           
 
 		# start a thread that constantly pools the video sensor for
@@ -42,7 +42,7 @@ class PhotoBoothApp:
 		self.thread.start()
 
 		# set a callback to handle when the window is closed
-		self.root.wm_title("PyImageSearch PhotoBooth")
+		self.root.wm_title("FocusStacking Program")
 		self.root.wm_protocol("WM_DELETE_WINDOW", self.onClose)
 
 	def videoLoop(self):
