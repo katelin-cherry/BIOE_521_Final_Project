@@ -1,0 +1,17 @@
+#Example of calling python script from a button
+
+#!/usr/bin/python
+import sys
+import os
+import Tkinter
+import tkMessageBox
+top=Tkinter.Tk()
+
+def helloCallBack():
+    os.system('python SendEmail.py')
+
+B=Tkinter.Button(top,text="hello",command= helloCallBack)
+B.pack()
+top.mainloop()
+
+#Found at: http://stackoverflow.com/questions/26852465/calling-a-python-script-on-button-click-using-python-and-tkinter
