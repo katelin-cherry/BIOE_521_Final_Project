@@ -2,7 +2,7 @@
 
 DATE='%Y-%m-%d_%H%M%S'
 
-fswebcam -r 1280x720 --no-banner "/home/pi/BIOE_521_Final_Project/focusstack/input/$DATE.jpg"
+fswebcam -r 640x480 --png --no-banner "/home/pi/BIOE_521_Final_Project/focusstack/input/$DATE.png"
 
 
 

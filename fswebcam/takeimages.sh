@@ -1,10 +1,15 @@
 #! /bin/bash
 
 cd /home/pi/BIOE_521_Final_Project/focusstack/input
-rm -f *.jpg
+rm -f *
 
 cd /home/pi/BIOE_521_Final_Project/fswebcam
-while true;do
+
+counter=1
+
+while [[ $counter -le 10 ]]
+do
 	./camera.sh;
-	sleep 5;
+	sleep 10;
+	((counter++))
 done

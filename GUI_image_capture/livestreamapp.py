@@ -28,7 +28,7 @@ class LiveStreamApp:
 		# frame and save it to file
 
 		btn = tki.Button(self.root, text="Start Image Capture",
-			command=self.takeSnapshot)
+			command=self.timelapse)
 		btn.pack(side="bottom", fill="both", expand="no", padx=5,
 			pady=5)
 		btn2 = tki.Button(self.root, text="Focusstack images", command=self.focusstack)
@@ -79,8 +79,8 @@ class LiveStreamApp:
 		except RuntimeError, e:
 			print("[INFO] caught a RuntimeError")
 
-       # def timelapse(self):
-        #        self.root.after(1000, takeSnapshot)
+        def timelapse(self):
+                self.root.after(1000, takeSnapshot)
                 
         def focusstack(self):
                 os.system('python main.py')
