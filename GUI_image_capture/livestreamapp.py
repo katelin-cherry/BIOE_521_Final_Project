@@ -31,6 +31,9 @@ class LiveStreamApp:
 			command=self.timelapse)
 		btn.pack(side="bottom", fill="both", expand="no", padx=5,
 			pady=5)
+		
+		#create a second button, that when pressed, will focusstack the 
+		#images and output the merged image to a window
 		btn2 = tki.Button(self.root, text="Focusstack images", command=self.focusstack)
 		btn2.pack(side="bottom", fill="both", expand="no", padx = 5, pady=5)
                           
@@ -46,17 +49,15 @@ class LiveStreamApp:
 		self.root.wm_protocol("WM_DELETE_WINDOW", self.onClose)
 
 	def videoLoop(self):
-		# DISCLAIMER:
-		# I'm not a GUI developer, nor do I even pretend to be. This
-		# try/except statement is a pretty ugly hack to get around
+		# try/except statement is a way to get around
 		# a RunTime error that Tkinter throws due to threading
 		try:
 			# keep looping over frames until we are instructed to stop
 			while not self.stopEvent.is_set():
 				# grab the frame from the video stream and resize it to
-				# have a maximum width of 300 pixels
+				# have a maximum width of 600 pixels
 				self.frame = self.vs.read()
-				self.frame = imutils.resize(self.frame, width=300)
+				self.frame = imutils.resize(self.frame, width=600)
 		
 				# OpenCV represents images in BGR order; however PIL
 				# represents images in RGB order, so we need to swap
@@ -82,14 +83,19 @@ class LiveStreamApp:
         def timelapse(self):
                 self.root.after(1000, takeSnapshot)
                 
+
+       # def timelapse(self):
+        #        self.root.after(1000, takeSnapshot)
+        
+	#function that will perform the focusstacking when btn2 is clicked
         def focusstack(self):
                 os.system('python main.py')
                 os.system('python load_image.py --image merged.png')
                           
+	#function that will take a picture when btn is clicked
 	def takeSnapshot(self):
 		# grab the current timestamp and use it to construct the
 		# output path   
-
                 ts = datetime.datetime.now()
                 filename = "{}.jpg".format(ts.strftime("%Y-%m-%d_%H-%M-%S"))
                 p = os.path.sep.join((self.outputPath, filename))
@@ -99,7 +105,7 @@ class LiveStreamApp:
                 #cv2.imwrite(filename,image)
                 print("[INFO] saved {}".format(filename))
 
-
+	#function that performs necessary tasks to shut the program
 	def onClose(self):
 		# set the stop event, cleanup the camera, and allow the rest of
 		# the quit process to continue
