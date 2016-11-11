@@ -112,8 +112,8 @@ def align_images(images):
 def doLap(image):
 
     # YOU SHOULD TUNE THESE VALUES TO SUIT YOUR NEEDS
-    kernel_size = 11        # Size of the laplacian window
-    blur_size = 11           # How big of a kernal to use for the gaussian blur
+    kernel_size = 5        # Size of the laplacian window
+    blur_size = 5           # How big of a kernal to use for the gaussian blur
                             # Generally, keeping these two values the same or very close works well
                             # Also, odd numbers, please...
 

@@ -19,24 +19,39 @@ class LiveStreamApp:
 		self.frame = None
 		self.thread = None
 		self.stopEvent = None
+		#self.count=0
 
 		# initialize the root window and image panel
 		self.root = tki.Tk()
 		self.panel = None
 
+
+		#create a second button, that when pressed, will focus stack the 
+		#images and output the merged image to a window
+		btn2 = tki.Button(self.root, text="Focus Stack images", command=self.focusstack)
+		btn2.pack(side="right", expand="no", padx = 5, pady=5)
+                          
+                #create a third button, that when pressed, will do single image capture
+		btn3 = tki.Button(self.root, text="Take Single Image",
+			command=self.takeSingleImage)
+		btn3.pack(side="right", expand="no", padx=5,
+			pady=5)
+
 		# create a button, that when pressed, will take the current
 		# frame and save it to file
-
-		btn = tki.Button(self.root, text="Start Image Capture",
-			command=self.timelapse)
-		btn.pack(side="bottom", fill="both", expand="no", padx=5,
+        
+		btn = tki.Button(self.root, text="Start Timelapse",
+			command=self.takeSnapshot)
+		btn.pack(side="right", expand="no", padx=5,
 			pady=5)
-		
-		#create a second button, that when pressed, will focusstack the 
-		#images and output the merged image to a window
-		btn2 = tki.Button(self.root, text="Focusstack images", command=self.focusstack)
-		btn2.pack(side="bottom", fill="both", expand="no", padx = 5, pady=5)
-                          
+
+                steps_label=tki.Label(self.root, text="Number of Steps")
+                steps_entry= tki.Entry(self.root)
+                steps_label.pack()
+                steps_entry.pack()
+                steps_entry.focus_set()
+    
+                #countermax= steps.get()
 
 		# start a thread that constantly pools the video sensor for
 		# the most recently read frame
@@ -79,31 +94,53 @@ class LiveStreamApp:
 
 		except RuntimeError, e:
 			print("[INFO] caught a RuntimeError")
-
-        def timelapse(self):
-                self.root.after(1000, takeSnapshot)
                 
 
        # def timelapse(self):
-        #        self.root.after(1000, takeSnapshot)
-        
+        #        self.root.after(1000, takeSnapshot) 
 	#function that will perform the focusstacking when btn2 is clicked
         def focusstack(self):
+                global counter
+
+
+                #ent_count=tki.Entry(Window)
+                #ent_count=tki.pack()
+                #counter=ent_count.get()
+ 
+                counter=0
+                os.system('python remove_low_res.py')
                 os.system('python main.py')
                 os.system('python load_image.py --image merged.png')
+
                           
 	#function that will take a picture when btn is clicked
+        global counter
+        counter=0
 	def takeSnapshot(self):
+                global counter
+
+                #global countermax
+                #countermax =self.steps.get()
 		# grab the current timestamp and use it to construct the
 		# output path   
+                if (counter<50):
+                        ts = datetime.datetime.now()
+                        filename = "{}.jpg".format(ts.strftime("%Y-%m-%d_%H-%M-%S"))
+                        p = os.path.sep.join((self.outputPath, filename))
+                        counter +=1
+                        # save the file
+                        cv2.imwrite(p, self.frame.copy())
+                        print("[INFO] saved {}".format(filename))
+                        self.root.after(10000, self.takeSnapshot)
+                          
+	def takeSingleImage(self):
                 ts = datetime.datetime.now()
                 filename = "{}.jpg".format(ts.strftime("%Y-%m-%d_%H-%M-%S"))
                 p = os.path.sep.join((self.outputPath, filename))
-
                 # save the file
                 cv2.imwrite(p, self.frame.copy())
-                #cv2.imwrite(filename,image)
                 print("[INFO] saved {}".format(filename))
+
 
 	#function that performs necessary tasks to shut the program
 	def onClose(self):
