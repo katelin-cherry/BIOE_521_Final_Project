@@ -34,6 +34,7 @@ http://stackoverflow.com/questions/15911783/what-are-some-common-focus-stacking-
 
 """
 
+
 import numpy as np
 import cv2
 
@@ -59,23 +60,23 @@ def align_images(images):
 
     #   SIFT generally produces better results, but it is not FOSS, so chose the feature detector
     #   that suits the needs of your project.  ORB does OK
-    use_sift = False
-
+    use_sift = True
+    
     outimages = []
 
     if use_sift:
-        detector = cv2.SIFT()
+        detector = cv2.xfeatures2d.SIFT_create()
     else:
         detector = cv2.ORB(1000)
 
     #   We assume that image 0 is the "base" image and align everything to it
-    print "Detecting features of base image"
+    print ("Detecting features of base image")
     outimages.append(images[0])
     image1gray = cv2.cvtColor(images[0],cv2.COLOR_BGR2GRAY)
     image_1_kp, image_1_desc = detector.detectAndCompute(image1gray, None)
 
     for i in range(1,len(images)):
-        print "Aligning image {}".format(i)
+        print ("Aligning image {}".format(i))
         image_i_kp, image_i_desc = detector.detectAndCompute(images[i], None)
 
         if use_sift:
@@ -126,14 +127,14 @@ def doLap(image):
 def focus_stack(unimages):
     images = align_images(unimages)
 
-    print "Computing the laplacian of the blurred images"
+    print ("Computing the laplacian of the blurred images")
     laps = []
     for i in range(len(images)):
-        print "Lap {}".format(i)
+        print ("Lap {}".format(i))
         laps.append(doLap(cv2.cvtColor(images[i],cv2.COLOR_BGR2GRAY)))
 
     laps = np.asarray(laps)
-    print "Shape of array of laplacians = {}".format(laps.shape)
+    print ("Shape of array of laplacians = {}".format(laps.shape))
 
     output = np.zeros(shape=images[0].shape, dtype=images[0].dtype)
 
