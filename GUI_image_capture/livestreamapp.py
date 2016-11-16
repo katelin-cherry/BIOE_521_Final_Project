@@ -46,10 +46,12 @@ class LiveStreamApp:
 			pady=5)
 
                 steps_label=tki.Label(self.root, text="Number of Steps")
-                steps_entry= tki.Entry(self.root)
+                self.steps_entry= tki.Entry(self.root)
                 steps_label.pack()
-                steps_entry.pack()
-                steps_entry.focus_set()
+                self.steps_entry.pack()
+                #global countermax
+                #countermax=self.steps_entry.get()
+                
     
                 #countermax= steps.get()
 
@@ -116,14 +118,17 @@ class LiveStreamApp:
 	#function that will take a picture when btn is clicked
         global counter
         counter=0
-	def takeSnapshot(self):
-                global counter
 
+ 
+	def takeSnapshot(self):
+                #input=self.steps_entry.get()
+                global counter
+                #global countermax
                 #global countermax
                 #countermax =self.steps.get()
 		# grab the current timestamp and use it to construct the
 		# output path   
-                if (counter<50):
+                if (counter<30):
                         ts = datetime.datetime.now()
                         filename = "{}.jpg".format(ts.strftime("%Y-%m-%d_%H-%M-%S"))
                         p = os.path.sep.join((self.outputPath, filename))
