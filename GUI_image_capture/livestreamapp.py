@@ -42,15 +42,15 @@ class LiveStreamApp:
         
 		btn = tki.Button(self.root, text="Start Timelapse",
 			command=self.takeSnapshot)
-		btn.pack(side="right", expand="no", padx=5,
+		btn.pack(side="bottom", expand="no", padx=5,
 			pady=5)
 
-                steps_label=tki.Label(self.root, text="Number of Steps")
-                steps_entry= tki.Entry(self.root)
-                steps_label.pack()
-                steps_entry.pack()
+                #steps_label=tki.Label(self.root, text="Number of Steps")
+                #steps_entry= tki.Entry(self.root)
+                #steps_label.pack()
+                #steps_entry.pack()
 
-                steps_entry.bind("<Return>", self.retrieveinput)
+                #steps_entry.bind("<Return>", self.retrieveinput)
 
                 #btn4 = tki.Button(self.root, text = "Enter", command=self.retrieve_input)
                 #btn4.pack(side="right", expand="no", padx=5, pady=5)
@@ -101,8 +101,8 @@ class LiveStreamApp:
 
 		except RuntimeError, e:
 			print("[INFO] caught a RuntimeError")
-        def retrieveinput(self):
-                print (self.steps_entry.get())
+        #def retrieveinput(self):
+         #       print (self.steps_entry.get())
 
        # def timelapse(self):
         #        self.root.after(1000, takeSnapshot) 
@@ -135,7 +135,7 @@ class LiveStreamApp:
                 #countermax =self.steps.get()
 		# grab the current timestamp and use it to construct the
 		# output path   
-                if (counter<300):
+                if (counter<150):
                         ts = datetime.datetime.now()
                         filename = "{}.jpg".format(ts.strftime("%Y-%m-%d_%H-%M-%S"))
                         p = os.path.sep.join((self.outputPath, filename))
