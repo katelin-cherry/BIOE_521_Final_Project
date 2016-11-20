@@ -1,3 +1,4 @@
+
 # import the necessary packages
 from __future__ import print_function
 from PIL import Image
@@ -19,46 +20,44 @@ class LiveStreamApp:
 		self.frame = None
 		self.thread = None
 		self.stopEvent = None
-		#self.count=0
 
 		# initialize the root window and image panel
 		self.root = tki.Tk()
 		self.panel = None
 
+                #user input for number of steps
+		steps_label = tki.Label(self.root, text="Number of Steps")
+		#steps_label.grid(row=1, column=1, padx=5, pady=5)
+ 		steps_label.pack(side="bottom") #, expand="no", padx=5, pady=5)
+                self.steps_entry = tki.Entry(self.root)
+                #self.steps_entry.grid(row=2, column=1)
+                self.steps_entry.pack(side="bottom") #, expand="no", padx=5, pady=5)
 
-		#create a second button, that when pressed, will focus stack the 
+ 		#user input for time per step (s)
+ 		time_label = tki.Label(self.root, text="Time per Step")
+                #time_label.grid(row=4, column=1, padx=5, pady=5)
+ 	        time_label.pack(side="bottom") #, expand="no", padx=5, pady=5)
+ 		self.time_entry = tki.Entry(self.root)
+ 		#self.time_entry.grid(row=5, column=1)
+ 		self.time_entry.pack(side="bottom")
+
+ 	        #Take Single Image button
+		btn3 = tki.Button(self.root, text="Take Single Image",
+		command=self.takeSingleImage)
+		#btn3.grid(row=7, column=1, padx=5, pady=5)
+		btn3.pack(side="right", expand="no", padx=5, pady=5)
+
+                #Start Timelapse button
+ 	        btn = tki.Button(self.root, text="Start Timelapse",
+		command=self.takeSnapshot)
+ 	        #btn.grid(row=9, column=1, padx=5, pady=5)
+		btn.pack(side="bottom", expand="no", padx=5, pady=5)
+
+		#creates a buttton that when pressed, will focus stack the 
 		#images and output the merged image to a window
 		btn2 = tki.Button(self.root, text="Focus Stack images", command=self.focusstack)
-		btn2.pack(side="right", expand="no", padx = 5, pady=5)
-                          
-                #create a third button, that when pressed, will do single image capture
-		btn3 = tki.Button(self.root, text="Take Single Image",
-			command=self.takeSingleImage)
-		btn3.pack(side="right", expand="no", padx=5,
-			pady=5)
-
-		# create a button, that when pressed, will take the current
-		# frame and save it to file
-        
-		btn = tki.Button(self.root, text="Start Timelapse",
-			command=self.takeSnapshot)
-		btn.pack(side="bottom", expand="no", padx=5,
-			pady=5)
-
-                #steps_label=tki.Label(self.root, text="Number of Steps")
-                #steps_entry= tki.Entry(self.root)
-                #steps_label.pack()
-                #steps_entry.pack()
-
-                #steps_entry.bind("<Return>", self.retrieveinput)
-
-                #btn4 = tki.Button(self.root, text = "Enter", command=self.retrieve_input)
-                #btn4.pack(side="right", expand="no", padx=5, pady=5)
-                #global countermax
-                #countermax=self.steps_entry.get()
-                
-    
-                #countermax= steps.get()
+		#btn2.grid(row=10, column=1, padx=5, pady=5)
+		btn2.pack(side="right", expand="no", padx=5, pady=5)
 
 		# start a thread that constantly pools the video sensor for
 		# the most recently read frame
@@ -70,6 +69,7 @@ class LiveStreamApp:
 		self.root.wm_title("FocusStacking Program")
 		self.root.wm_protocol("WM_DELETE_WINDOW", self.onClose)
 
+
 	def videoLoop(self):
 		# try/except statement is a way to get around
 		# a RunTime error that Tkinter throws due to threading
@@ -77,9 +77,10 @@ class LiveStreamApp:
 			# keep looping over frames until we are instructed to stop
 			while not self.stopEvent.is_set():
 				# grab the frame from the video stream and resize it to
-				# have a maximum width of 600 pixels
+				# have a maximum width of XXX pixels
 				self.frame = self.vs.read()
-				self.frame = imutils.resize(self.frame, width=600)
+				self.frame = imutils.resize(self.frame, width=500)
+				#self.frame.grid(row=10, column=10, padx=10, pady=10)
 		
 				# OpenCV represents images in BGR order; however PIL
 				# represents images in RGB order, so we need to swap
@@ -101,20 +102,11 @@ class LiveStreamApp:
 
 		except RuntimeError, e:
 			print("[INFO] caught a RuntimeError")
-        #def retrieveinput(self):
-         #       print (self.steps_entry.get())
 
-       # def timelapse(self):
-        #        self.root.after(1000, takeSnapshot) 
+
 	#function that will perform the focusstacking when btn2 is clicked
         def focusstack(self):
                 global counter
-
-
-                #ent_count=tki.Entry(Window)
-                #ent_count=tki.pack()
-                #counter=ent_count.get()
- 
                 counter=0
                 os.system('python remove_low_res.py')
                 os.system('python main.py')
@@ -122,20 +114,17 @@ class LiveStreamApp:
 
                           
 	#function that will take a picture when btn is clicked
-
         global counter
         counter=0
-
  
 	def takeSnapshot(self):
-                #countermax=self.steps_entry.get()
                 global counter
-                #global countermax
-                #global countermax
-                #countermax =self.steps.get()
 		# grab the current timestamp and use it to construct the
-		# output path   
-                if (counter<150):
+		# output path
+		numSteps = int(self.steps_entry.get())
+		timePerStep = int(self.time_entry.get())
+		msPerStep = int(timePerStep*1000)
+                if (counter<numSteps):
                         ts = datetime.datetime.now()
                         filename = "{}.jpg".format(ts.strftime("%Y-%m-%d_%H-%M-%S"))
                         p = os.path.sep.join((self.outputPath, filename))
@@ -143,7 +132,8 @@ class LiveStreamApp:
                         # save the file
                         cv2.imwrite(p, self.frame.copy())
                         print("[INFO] saved {}".format(filename))
-                        self.root.after(10000, self.takeSnapshot)
+                        self.root.after(msPerStep, self.takeSnapshot)
+                
                           
 	def takeSingleImage(self):
                 ts = datetime.datetime.now()
