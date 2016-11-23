@@ -9,6 +9,7 @@ import datetime
 import imutils
 import cv2
 import os
+import subprocess
 
 class LiveStreamApp:
 	def __init__(self, vs, outputPath):
@@ -17,47 +18,50 @@ class LiveStreamApp:
 		# the thread stop event
 		self.vs = vs
 		self.outputPath = outputPath
-		self.frame = None
+		#self.frame = None
 		self.thread = None
 		self.stopEvent = None
+		self.count=1
+		self.steps=1
 
 		# initialize the root window and image panel
 		self.root = tki.Tk()
 		self.panel = None
-
+                #top=Toplevel(self.root)
+                #f = Frame(self.root)
                 #user input for number of steps
 		steps_label = tki.Label(self.root, text="Number of Steps")
 		#steps_label.grid(row=1, column=1, padx=5, pady=5)
- 		steps_label.pack(side="bottom") #, expand="no", padx=5, pady=5)
+ 		steps_label.pack(side="bottom", expand="no", padx=5, pady=5)
                 self.steps_entry = tki.Entry(self.root)
                 #self.steps_entry.grid(row=2, column=1)
-                self.steps_entry.pack(side="bottom") #, expand="no", padx=5, pady=5)
+                self.steps_entry.pack(side="bottom", expand="no", padx=5, pady=5)
 
  		#user input for time per step (s)
  		time_label = tki.Label(self.root, text="Time per Step")
                 #time_label.grid(row=4, column=1, padx=5, pady=5)
- 	        time_label.pack(side="bottom") #, expand="no", padx=5, pady=5)
+ 	        time_label.pack(side="bottom", expand="no", padx=5, pady=5)
  		self.time_entry = tki.Entry(self.root)
  		#self.time_entry.grid(row=5, column=1)
- 		self.time_entry.pack(side="bottom")
+ 		self.time_entry.pack(side="bottom", expand="yes", padx=5, pady=5)
 
  	        #Take Single Image button
-		btn3 = tki.Button(self.root, text="Take Single Image",
+		SingleImageBtn = tki.Button(self.root, text="Take Single Image",
 		command=self.takeSingleImage)
 		#btn3.grid(row=7, column=1, padx=5, pady=5)
-		btn3.pack(side="right", expand="no", padx=5, pady=5)
+		SingleImageBtn.pack(side="right", expand="no", padx=5, pady=5)
 
                 #Start Timelapse button
- 	        btn = tki.Button(self.root, text="Start Timelapse",
-		command=self.takeSnapshot)
+ 	        TimelapseBtn = tki.Button(self.root, text="Start Timelapse",
+		command=self.takeTimelapseMaster)
  	        #btn.grid(row=9, column=1, padx=5, pady=5)
-		btn.pack(side="bottom", expand="no", padx=5, pady=5)
+		TimelapseBtn.pack(side="bottom", expand="no", padx=5, pady=5)
 
 		#creates a buttton that when pressed, will focus stack the 
 		#images and output the merged image to a window
-		btn2 = tki.Button(self.root, text="Focus Stack images", command=self.focusstack)
+		FocusStackBtn = tki.Button(self.root, text="Focus Stack images", command=self.focusstack)
 		#btn2.grid(row=10, column=1, padx=5, pady=5)
-		btn2.pack(side="right", expand="no", padx=5, pady=5)
+		FocusStackBtn.pack(side="right", expand="no", padx=5, pady=5)
 
 		# start a thread that constantly pools the video sensor for
 		# the most recently read frame
@@ -104,38 +108,71 @@ class LiveStreamApp:
 			print("[INFO] caught a RuntimeError")
 
 
-	#function that will perform the focusstacking when btn2 is clicked
+	#function that will perform the focusstacking when FocusStackButton is clicked
         def focusstack(self):
-                global counter
-                counter=0
-                os.system('python remove_low_res.py')
+                #resets counters
+                self.count=1
+                self.steps=1
+
+                #zips raw images taken during timelapse(currently not working)
+                #self.root.after(1,self.ziprawimages)
+
+                #runs focusstacking code
                 os.system('python main.py')
+                #loads merged focus stacked image in new window
                 os.system('python load_image.py --image merged.png')
 
                           
-	#function that will take a picture when btn is clicked
-        global counter
-        counter=0
- 
-	def takeSnapshot(self):
-                global counter
-		# grab the current timestamp and use it to construct the
-		# output path
-		numSteps = int(self.steps_entry.get())
+	#function that takes timelapse of images when TimelapseBtn is clicked
+        def takeTimelapseMaster(self):
+                #resets count for images taken at each step
+                self.count=1
+                #takes user input for Number of Steps
+                numSteps = int(self.steps_entry.get())
+                #takes user input for Time Per Step
 		timePerStep = int(self.time_entry.get())
 		msPerStep = int(timePerStep*1000)
-                if (counter<numSteps):
+		#Calls function to take multiple images at step
+		self.root.after(1, self.takeTimelapse)
+		#Calls function to average images at step
+		self.root.after(2000, self.averageimages)
+		#loops through function until number of steps is equal to user's input
+		if (self.steps<numSteps):
+                        self.steps+=1
+                        self.root.after(msPerStep, self.takeTimelapseMaster)
+
+        #function to take multiple images at step
+	def takeTimelapse(self):
+                if (self.count<= 5):
+                        # grab the current timestamp and use it to construct the output path
                         ts = datetime.datetime.now()
-                        filename = "{}.jpg".format(ts.strftime("%Y-%m-%d_%H-%M-%S"))
-                        p = os.path.sep.join((self.outputPath, filename))
-                        counter +=1
+                        filename = "{}.jpg".format(ts.strftime("%Y-%m-%d_%H-%M-%S.%f"))
+                        #filename = "{}.jpg".format([self.step]+["-"]+[self.count])
+                        p = os.path.sep.join((self.outputPath, filename,))
+                        self.count+=1
                         # save the file
                         cv2.imwrite(p, self.frame.copy())
                         print("[INFO] saved {}".format(filename))
-                        self.root.after(msPerStep, self.takeSnapshot)
-                
-                          
+                        self.root.after(10, self.takeTimelapse)
+
+        #function to average images at each step             
+        def averageimages(self):
+                #copies images in output folder to be viewed later if desired
+                subprocess.call(["cp /home/pi/BIOE_521_Final_Project/GUI_image_capture/output/*.jpg /home/pi/BIOE_521_Final_Project/GUI_image_capture/saved"],shell=True)
+                #calls python function to average images
+                os.system('python averageimages.py')
+                print ("Saved averaged image")
+                #calls python script to remove images in output folder
+                os.system('python remove_images.py')
+
+        #zips raw images taken during timelapse for later use (currently not being called in code)
+        def ziprawimages(self):
+                subprocess.call(["./zipfiles.sh"],shell=True)
+
+        #function to allow user to take a single image (another use case if just want to take images. NOT advised if wishing to focusstack images.)                
 	def takeSingleImage(self):
+                # grab the current timestamp and use it to construct the
+		# output path
                 ts = datetime.datetime.now()
                 filename = "{}.jpg".format(ts.strftime("%Y-%m-%d_%H-%M-%S"))
                 p = os.path.sep.join((self.outputPath, filename))

@@ -22,14 +22,14 @@ def stackHDRs(image_files):
     focusimages = []
     for img in image_files:
         print "Reading in file {}".format(img)
-        focusimages.append(cv2.imread("output/{}".format(img)))
+        focusimages.append(cv2.imread("input/{}".format(img)))
 
     merged = FocusStack.focus_stack(focusimages)
     cv2.imwrite("merged.png", merged)
 
 
 if __name__ == "__main__":
-    image_files = sorted(os.listdir("output"))
+    image_files = sorted(os.listdir("input"))
     for img in image_files:
         if img.split(".")[-1].lower() not in ["jpg", "jpeg", "png"]:
             image_files.remove(img)
