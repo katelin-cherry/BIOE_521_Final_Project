@@ -8,7 +8,7 @@ We created a low-cost focus stacking system using a USB microscope to image samp
 
 **Using the Program**  
 1. Download the Github zip file or download the source repository.  
-2. Navigate to ~/BIOE_521_Final_Project/ in the terminal  
+2. Navigate to ~/BIOE_521_Final_Project/GUI_image_capture in the terminal  
 3. Type `python live_stream.py --output output` in the terminal   
 4. Plug the USB microscope into the Raspberry Pi and set it up in front of the Stackshot.   
 5. The focusstacking window will appear on the screen. There will be a live feed of the USB microscope. Adjust the focus and lighting on the microscope until the front portion of the specimen is in focus.  
