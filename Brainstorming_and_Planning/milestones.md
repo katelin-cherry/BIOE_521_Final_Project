@@ -2,11 +2,11 @@
 #### Team 11: House of Pies - Katelin Cherry & Melody Tan
 
 #### Milestones
-* ~~**October 13th**: Brainstorm due~~
-* ~~**October 20th**: 
+* **October 13th**: Brainstorm due
+* **October 20th**: 
     - Components ordered
     - Plan of action
-    - Identify existing open-source resources~~
+    - Identify existing open-source resources
 * **October 27th**: 
     - Connect microscope, stackshot, and pi
     - Capture images at a set of planes
