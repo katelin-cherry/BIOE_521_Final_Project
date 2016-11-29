@@ -1,5 +1,10 @@
 # USAGE
 # python live_stream.py --output output
+# Main script to launch Focus Stacking program.
+
+# This was adapted from Adrian
+# Rosebrocks blog post on "Displaying a video feed with OpenCV and Tkinter" at
+# pyimagesearch.com
 
 # import the necessary packages
 from __future__ import print_function

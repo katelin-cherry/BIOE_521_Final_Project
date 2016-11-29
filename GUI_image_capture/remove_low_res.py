@@ -1,3 +1,6 @@
+#removes low res images that were taken during timelapse. Image averaging
+#and focus stacking will not work if images are not of the same resolution.
+
 import os
 from PIL import Image
 

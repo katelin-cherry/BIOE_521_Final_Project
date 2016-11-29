@@ -1,3 +1,6 @@
+#Script to load merged (focus stacked) image in a new window
+#after focus stacking images within program.
+
 #import the necessary packages
 import argparse
 import cv2
