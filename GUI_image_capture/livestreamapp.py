@@ -149,7 +149,7 @@ class LiveStreamApp:
 
         # function to take multiple images at step
 	def takeTimelapse(self):
-                if (self.count<= 5):
+                if (self.count<= 1):
                         # grab the current timestamp and use it to construct the output path
                         ts = datetime.datetime.now()
                         filename = "{}.jpg".format(ts.strftime("%Y-%m-%d_%H-%M-%S.%f"))
